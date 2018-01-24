@@ -2,23 +2,28 @@
 
 const webpack = require('webpack');
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: __dirname + '/public/app-client.js',
+  devtool: 'inline-source-map',
+  entry: ['./public/app-client.js'],
   output: {
-    path: __dirname + '/public/js',
+    path: path.join(__dirname, '/public/js'),
     filename: 'bundle.js',
   },
   module: {
-    loaders: [{
-      test: /\.jsx?$/,
-      loader: 'babel-loader',
-      exclude: /node_modules/,
-      query: {
-        cacheDirectory: 'babel_cache',
-        presets: ['react', 'es2015']
+    loaders: [
+      {
+        test: /\.js$/,
+        loader: ['babel-loader'],
+        include: path.join(__dirname, 'public'),
+        exclude: /node_modules/,
+        query: {
+          cacheDirectory: 'babel_cache',
+          presets: ['es2015', 'react']
+        }
       }
-    }]
+    ]
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -30,7 +35,7 @@ module.exports = {
       mangle: true,
       sourcemap: false,
       beautify: false,
-      dead_code: false
+      dead_code: true
     })
   ]
 }
